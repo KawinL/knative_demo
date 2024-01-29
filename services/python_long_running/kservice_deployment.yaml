@@ -1,0 +1,22 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: python-long-running
+  namespace: default
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/min-scale: "1"
+        autoscaling.knative.dev/max-scale: "1"
+    spec:
+      containers:
+        - image: docker.io/kawinl/long_running_python:latest
+          env:
+            - name: I_HAVE_TO_DIE
+              value: "yes"
+            - name: TIME_TO_DIE
+              value: "150"
+        - image: docker.io/kawinl/sidecar:latest
+          ports:
+            - containerPort: 8080

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-long-running
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-long-running
+  template:
+    metadata:
+      labels:
+        app: python-long-running
+    spec:
+      containers:
+        - name: python-long-running
+          image: docker.io/kawinl/long_running_python:latest
+          env:
+            - name: I_HAVE_TO_DIE
+              value: "yes"
+            - name: TIME_TO_DIE
+              value: "150"
+          livenessProbe:
+            exec:
+              command:
+              - ls
+          readinessProbe:
+            exec:
+              command:
+              - ls
